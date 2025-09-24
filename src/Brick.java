@@ -13,6 +13,9 @@ public class Brick {
         g.fillRect(x, y, width, height);
         g.setColor(Color.BLACK);
         g.drawRect(x, y, width, height);
+          if (!destroyed) {
+        g.drawImage(Assets.brick, x, y, width, height, null);
+    }
     }
 
     public Rectangle getRect() {

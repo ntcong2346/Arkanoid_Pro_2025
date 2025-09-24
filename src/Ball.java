@@ -16,8 +16,7 @@ public class Ball {
     }
 
     public void draw(Graphics g) {
-        g.setColor(Color.WHITE);
-        g.fillOval(x, y, diameter, diameter);
+        g.drawImage(Assets.ball, x, y, diameter, diameter, null);
     }
 
     public Rectangle getRect() {

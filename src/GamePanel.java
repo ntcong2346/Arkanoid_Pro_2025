@@ -87,7 +87,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-
+         g.drawImage(Assets.background, 0, 0, WIDTH, HEIGHT, null);
         paddle.draw(g);
         ball.draw(g);
 
@@ -104,6 +104,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
             g.setFont(new Font("Arial", Font.BOLD, 36));
             g.drawString("GAME OVER - Press R to Restart", 120, HEIGHT/2);
         }
+
     }
 
     // KeyListener

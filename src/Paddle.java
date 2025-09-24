@@ -15,11 +15,12 @@ public class Paddle {
     }
 
     public void draw(Graphics g) {
-        g.setColor(Color.CYAN);
-        g.fillRect(x, y, width, height);
+        g.drawImage(Assets.paddle, x, y, width, height, null);
     }
 
     public Rectangle getRect() {
         return new Rectangle(x, y, width, height);
     }
+
+    
 }

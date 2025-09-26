@@ -71,46 +71,36 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
             paddle.updateGlow(); // Cập nhật hiệu ứng mỗi frame
 
             // ball vs bricks
-            for (Brick b : bricks) {
-                if (!b.destroyed && ball.getRect().intersects(b.getRect())) {
-                    Rectangle br = b.getRect();
-                    Rectangle bl = ball.getRect();
+            Rectangle nextBallRect = new Rectangle(
+                    (int) (ball.x + ball.dx),
+                    (int) (ball.y + ball.dy),
+                    ball.diameter,
+                    ball.diameter
+            );
 
-                    // Gọi hit để xử lý logic gạch
-                    b.hit(bricks);
-                    if (b.destroyed && b.type != Brick.UNBREAKABLE) {
-                        score += 100;
-                    }
+            for (Brick b : bricks) {
+                if (!b.destroyed && nextBallRect.intersects(b.getRect())) {
+                    Rectangle brickRect = b.getRect();
 
                     // Xác định hướng va chạm
-                    double overlapLeft = bl.getMaxX() - br.getMinX();
-                    double overlapRight = br.getMaxX() - bl.getMinX();
-                    double overlapTop = bl.getMaxY() - br.getMinY();
-                    double overlapBottom = br.getMaxY() - bl.getMinY();
+                    boolean hitFromLeft = ball.x + ball.diameter <= brickRect.x && ball.x + ball.diameter + ball.dx > brickRect.x;
+                    boolean hitFromRight = ball.x >= brickRect.x + brickRect.width && ball.x + ball.dx < brickRect.x + brickRect.width;
+                    boolean hitFromTop = ball.y + ball.diameter <= brickRect.y && ball.y + ball.diameter + ball.dy > brickRect.y;
+                    boolean hitFromBottom = ball.y >= brickRect.y + brickRect.height && ball.y + ball.dy < brickRect.y + brickRect.height;
 
-                    // Tìm cạnh có overlap nhỏ nhất → đó là cạnh va chạm
-                    double minOverlapX = Math.min(overlapLeft, overlapRight);
-                    double minOverlapY = Math.min(overlapTop, overlapBottom);
-
-                    if (minOverlapX < minOverlapY) {
-                        // Va chạm ngang → đảo dx
-                        ball.dx = -ball.dx;
-                        if (overlapLeft < overlapRight) {
-                            ball.x = br.x - ball.diameter; // đẩy bóng ra bên trái
-                        } else {
-                            ball.x = br.x + br.width; // đẩy bóng ra bên phải
-                        }
+                    // Đảo chiều vận tốc phù hợp
+                    if (hitFromLeft || hitFromRight) {
+                        ball.dx *= -1;
+                    } else if (hitFromTop || hitFromBottom) {
+                        ball.dy *= -1;
                     } else {
-                        // Va chạm dọc → đảo dy
-                        ball.dy = -ball.dy;
-                        if (overlapTop < overlapBottom) {
-                            ball.y = br.y - ball.diameter; // đẩy bóng lên trên
-                        } else {
-                            ball.y = br.y + br.height; // đẩy bóng xuống dưới
-                        }
+                        // Nếu không xác định được, đảo cả hai
+                        ball.dx *= -1;
+                        ball.dy *= -1;
                     }
 
-                    break; // chỉ xử lý 1 gạch mỗi frame
+                    b.hit(bricks); // Xử lý logic phá gạch
+                    break; // Chỉ xử lý va chạm với 1 viên gạch mỗi frame
                 }
             }
 

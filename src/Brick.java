@@ -63,25 +63,24 @@ public class Brick {
 
         switch (type) {
             case NORMAL:
-                g.setColor(Color.ORANGE);
+                g.drawImage(Assets.brickNormal, x, y, width, height, null);
                 break;
             case EXPLOSIVE:
-                g.setColor(Color.RED);
+                g.drawImage(Assets.brickExplosive, x, y, width, height, null);
                 break;
             case STRONG:
-                // Đổi màu theo số lần bị đánh
-                if (hitPoints == 3) g.setColor(new Color(128, 0, 128)); // tím đậm
-                else if (hitPoints == 2) g.setColor(new Color(180, 90, 180)); // tím nhạt hơn
-                else if (hitPoints == 1) g.setColor(new Color(220, 180, 220)); // tím rất nhạt
+                if (hitPoints == 3) {
+                    g.drawImage(Assets.brickStrong3, x, y, width, height, null);
+                } else if (hitPoints == 2) {
+                    g.drawImage(Assets.brickStrong2, x, y, width, height, null);
+                } else if (hitPoints == 1) {
+                    g.drawImage(Assets.brickStrong1, x, y, width, height, null);
+                }
                 break;
             case UNBREAKABLE:
-                g.setColor(Color.GRAY);
+                g.drawImage(Assets.brickUnbreakable, x, y, width, height, null);
                 break;
         }
-
-        g.fillRect(x, y, width, height);
-        g.setColor(Color.BLACK);
-        g.drawRect(x, y, width, height);
     }
 
     public Rectangle getRect() {

@@ -14,7 +14,10 @@ public class Brick {
     boolean destroyed = false;
 
     public Brick(int x, int y, int w, int h, int type) {
-        this.x = x; this.y = y; this.width = w; this.height = h;
+        this.x = x;
+        this.y = y;
+        this.width = w;
+        this.height = h;
         this.type = type;
 
         switch (type) {

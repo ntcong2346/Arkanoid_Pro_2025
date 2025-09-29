@@ -9,7 +9,7 @@ public class Main {
         JFrame frame = new GameFrame();
         frame.setContentPane(new MenuPanel(frame));
         frame.setVisible(true);
-        Ball ball = new Ball(WIDTH/2, HEIGHT - 70, MenuPanel.ballSize, MenuPanel.ballSpeed, MenuPanel.ballSpeed);
+        Ball ball = new Ball(WIDTH/2, HEIGHT - 70, MenuPanel.ballSize, MenuPanel.ballSpeed);
         Paddle paddle = new Paddle(WIDTH/2 - 60, HEIGHT - 50, 120, 15);
         paddle.speed = MenuPanel.paddleSpeed;
     }

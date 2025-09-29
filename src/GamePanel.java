@@ -36,7 +36,8 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
         win = false;
         gameOver = false;
         paddle = new Paddle(WIDTH / 2 - 60, HEIGHT - 50, 120, 15);
-        ball = new Ball(WIDTH / 2, HEIGHT - 70, 12, 8, 8);
+        paddle.speed = MenuPanel.paddleSpeed;
+        ball = new Ball(WIDTH / 2, HEIGHT - 70, MenuPanel.ballSize, MenuPanel.ballSpeed);
         bricks = new ArrayList<>();
         createLevel(level);
     }

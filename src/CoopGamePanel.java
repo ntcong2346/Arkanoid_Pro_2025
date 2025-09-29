@@ -41,7 +41,7 @@ public class CoopGamePanel extends JPanel implements ActionListener, KeyListener
         paddle1 = new Paddle(WIDTH*3/4 - 60, HEIGHT - 50, 120, 15);
         paddle1.speed = MenuPanel.paddleSpeed;
         paddle2.speed = MenuPanel.paddleSpeed;
-        ball = new Ball(0, 0, MenuPanel.ballSize, MenuPanel.ballSpeed, MenuPanel.ballSpeed);
+        ball = new Ball(0, 0, MenuPanel.ballSize, MenuPanel.ballSpeed);
         paddleLaunchIndex = 0;
         bricks = new ArrayList<>();
         createLevel(level);

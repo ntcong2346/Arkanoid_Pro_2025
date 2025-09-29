@@ -5,13 +5,14 @@ public class Ball {
     double x, y;
     int diameter;
     int dx, dy;
-    int speed = 3;
+    int speed;
     boolean inMotion = false;
 
-    public Ball(int x, int y, int d, int dx, int dy) {
+    public Ball(int x, int y, int d, int ballSpeed) {
         this.x = x;
         this.y = y;
         this.diameter = d;
+        this.speed = ballSpeed; // Gán giá trị speed từ tham số
         this.dx = 0;
         this.dy = 0;
     }

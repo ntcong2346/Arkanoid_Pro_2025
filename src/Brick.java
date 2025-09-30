@@ -8,10 +8,10 @@ public class Brick {
     public static final int STRONG = 2;
     public static final int UNBREAKABLE = 3;
 
-    int x, y, width, height;
-    int type;
-    int hitPoints;
-    boolean destroyed = false;
+    private int x, y, width, height;
+    private int type;
+    private int hitPoints;
+    private boolean destroyed;
 
     public Brick(int x, int y, int w, int h, int type) {
         this.x = x;
@@ -19,11 +19,10 @@ public class Brick {
         this.width = w;
         this.height = h;
         this.type = type;
+        this.destroyed = false;
 
         switch (type) {
-            case NORMAL: 
-                hitPoints = 1; 
-                break;
+            case NORMAL:
             case EXPLOSIVE: 
                 hitPoints = 1; 
                 break;
@@ -36,9 +35,17 @@ public class Brick {
         }
     }
 
+    public int getX() { return x; }
+    public int getY() { return y; }
+    public int getWidth() { return width; }
+    public int getHeight() { return height; }
+    public boolean isDestroyed() { return destroyed; }
+    public int getType() { return type; }
+    public int getHitPoints() { return hitPoints; }
+
     // Khi bóng chạm
     public void hit(ArrayList<Brick> bricks) {
-        if (type == UNBREAKABLE) return; // miễn nhiễm
+        if (type == UNBREAKABLE || destroyed) return; // miễn nhiễm
         hitPoints--;
         if (hitPoints <= 0) {
             destroyed = true;
@@ -50,11 +57,11 @@ public class Brick {
 
     // Gạch nổ: phá gạch xung quanh
     private void explode(ArrayList<Brick> bricks) {
+        Rectangle thisRect = getRect();
         for (Brick b : bricks) {
             if (!b.destroyed && b.type != UNBREAKABLE) {
-                double dx = Math.abs(b.x - this.x);
-                double dy = Math.abs(b.y - this.y);
-                if (dx <= width * 1.5 && dy <= height * 1.5) {
+                Rectangle bRect = b.getRect();
+                if (thisRect.intersects(bRect)) {
                     b.destroyed = true;
                 }
             }
@@ -63,7 +70,6 @@ public class Brick {
 
     public void draw(Graphics g) {
         if (destroyed) return;
-
         switch (type) {
             case NORMAL:
                 g.drawImage(Assets.brickNormal, x, y, width, height, null);

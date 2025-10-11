@@ -1,5 +1,4 @@
 import java.awt.*;
-import java.awt.geom.Ellipse2D;
 import java.util.Random;
 
 public class Ball {
@@ -7,7 +6,7 @@ public class Ball {
     private double dx, dy; //Speed & direction by axis of ball
     private int radius;
     private int speed;
-    private boolean inMotion = false; //Is ball flying?
+    private boolean inMotion; //Is ball flying?
 
     public double getX() { return x; }
     public double getY() { return y; }

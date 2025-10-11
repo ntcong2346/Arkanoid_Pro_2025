@@ -51,8 +51,8 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
                 paddle.moveRight(WIDTH);
             // ball in the paddle
             if (!ball.isInMotion()) {
-                ball.setX(paddle.getX() + paddle.getWidth() / 2.0 - ball.getDiameter() / 2.0);
-                ball.setY(paddle.getY() - ball.getDiameter() - 1);
+                ball.setX(paddle.getX() + paddle.getWidth() / 2.0);
+                ball.setY(paddle.getY() - ball.getRadius() - 1);
             }
 
             ball.move();
@@ -112,7 +112,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
                     gameOver = true;
                 } else {
                     // reset ball position in the paddle
-                    ball.reset(paddle.getX() + paddle.getWidth() / 2 - ball.getDiameter() / 2, paddle.getY() - ball.getDiameter() - 2);
+                    ball.reset(paddle.getX() + paddle.getWidth() / 2, paddle.getY() - ball.getRadius() - 2);
                 }
             }
 
@@ -131,8 +131,8 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
                     win = true;
                 } else {
                     createLevel(level);
-                    ball.reset(paddle.getX() + paddle.getWidth() / 2 - ball.getDiameter() / 2,
-                            paddle.getY() - ball.getDiameter() - 2);
+                    ball.reset(paddle.getX() + paddle.getWidth() / 2,
+                            paddle.getY() - ball.getRadius() - 2);
                 }
             }
         }
@@ -191,7 +191,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
             if (level > 5)
                 level = 1;
             createLevel(level);
-            ball.reset(paddle.getX() + paddle.getWidth() / 2 - ball.getDiameter() / 2, paddle.getY() - ball.getDiameter() - 2);
+            ball.reset(paddle.getX() + paddle.getWidth() / 2, paddle.getY() - ball.getRadius() - 2);
         }
     }
 

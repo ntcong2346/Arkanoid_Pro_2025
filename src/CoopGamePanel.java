@@ -62,33 +62,37 @@ public class CoopGamePanel extends JPanel implements ActionListener, KeyListener
             // Ball follows paddle before launch
             if (!ball.isInMotion()) {
                 Paddle launchPad = (paddleLaunchIndex == 0) ? paddle1 : paddle2;
-                ball.setX(launchPad.getX() + launchPad.getWidth()/2 - ball.getDiameter()/2);
-                ball.setY(launchPad.getY() - ball.getDiameter() - 1);
+                ball.setX(launchPad.getX() + launchPad.getWidth() / 2.0);
+                ball.setY(launchPad.getY() - ball.getRadius() - 1);
             }
 
             ball.move();
 
             // Ball vs walls
-            if (ball.getX() <= 0 || ball.getX() + ball.getDiameter() >= WIDTH) ball.setDX(ball.getDX() * -1);
-            if (ball.getY() <= 0) ball.setDY(ball.getDY() * -1);
+            if (ball.getX() - ball.getRadius() <= 0 || ball.getX() + ball.getRadius() >= WIDTH) {
+                ball.bounceHorizontal();
+            }
+            if (ball.getY() - ball.getRadius() <= 0) { // Tường Trên
+                ball.bounceVertical();
+            }
 
             // Ball vs paddles (chỉ xử lý va chạm với 1 paddle mỗi frame)
             boolean collided = false;
             if (ball.getRect().intersects(paddle1.getRect())) {
-                ball.setDY(ball.getDY() * -1);
+                ball.bounceVertical();
                 paddle1.setGlow();
                 collided = true;
             }
             if (!collided && ball.getRect().intersects(paddle2.getRect())) {
-                ball.setDY(ball.getDY() * -1);
+                ball.bounceVertical();
                 paddle2.setGlow();
                 collided = true;
             }
 
             // Ball vs bricks
             Rectangle nextBallRect = new Rectangle(
-                (int)(ball.getX() + ball.getDX()),
-                (int)(ball.getY() + ball.getDY()),
+                (int) Math.round(ball.getX() + ball.getDX() - ball.getRadius()),
+                (int) Math.round(ball.getY() + ball.getDY() - ball.getRadius()),
                 ball.getDiameter(),
                 ball.getDiameter()
             );
@@ -105,16 +109,23 @@ public class CoopGamePanel extends JPanel implements ActionListener, KeyListener
 
                     // Đảo chiều vận tốc phù hợp
                     if (hitFromLeft || hitFromRight) {
-                        ball.setDX(ball.getDX() * -1);
+                        ball.bounceHorizontal();
                     } else if (hitFromTop || hitFromBottom) {
-                        ball.setDY(ball.getDY() * -1);
+                        ball.bounceVertical();
                     } else {
                         // Nếu không xác định được, đảo cả hai
-                        ball.setDX(ball.getDX() * -1);
-                        ball.setDY(ball.getDY() * -1);
+                        ball.bounceHorizontal();
+                        ball.bounceVertical();
                     }
 
+                    boolean wasDestroyed = b.isDestroyed(); // Kiểm tra trạng thái trước khi hit
                     b.hit(bricks); // Xử lý logic phá gạch
+
+                    // --- Bổ sung logic tính điểm ---
+                    if (!wasDestroyed && b.isDestroyed()) {
+                        score += b.getScoreValue();
+                    }
+
                     break; // Chỉ xử lý va chạm với 1 viên gạch mỗi frame
                 }
             }
@@ -174,7 +185,7 @@ public class CoopGamePanel extends JPanel implements ActionListener, KeyListener
         if (!ball.isInMotion() && !gameOver) {
             g.setColor(Color.YELLOW);
             g.setFont(new Font("Arial", Font.BOLD, 24));
-            g.drawString("Bấm SPACE để bắt đầu", WIDTH/2 - 150, HEIGHT/2 + 100);
+            g.drawString("Bấm SPACE để bắt đầu", WIDTH/2 - 130, HEIGHT/2 + 100);
         }
 
         if (win) {

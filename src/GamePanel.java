@@ -58,14 +58,16 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
             ball.move();
 
             // ball vs walls
-            if (ball.getX() <= 0 || ball.getX() + ball.getDiameter() >= WIDTH)
+            if (ball.getX() - ball.getRadius() <= 0 || ball.getX() + ball.getRadius() >= WIDTH) {
                 ball.bounceHorizontal();
-            if (ball.getY() <= 0)
+            }
+            if (ball.getY() - ball.getRadius() <= 0) { // Tường Trên
                 ball.bounceVertical();
+            }
 
             // ball vs paddle
             if (ball.getRect().intersects(paddle.getRect())) {
-                ball.setDY(ball.getDY() * -1);
+                ball.bounceVertical();
                 paddle.setGlow(); // Kích hoạt hiệu ứng phát sáng
             }
 
@@ -73,8 +75,8 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 
             // ball vs bricks
             Rectangle nextBallRect = new Rectangle(
-                    (int) Math.round(ball.getX() + ball.getDX()),
-                    (int) Math.round(ball.getY() + ball.getDY()),
+                    (int) Math.round(ball.getX() + ball.getDX() - ball.getRadius()),
+                    (int) Math.round(ball.getY() + ball.getDY() - ball.getRadius()),
                     ball.getDiameter(),
                     ball.getDiameter()
             );
@@ -91,16 +93,23 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 
                     // Đảo chiều vận tốc phù hợp
                     if (hitFromLeft || hitFromRight) {
-                        ball.setDX(ball.getDX() * -1);
+                        ball.bounceHorizontal();
                     } else if (hitFromTop || hitFromBottom) {
-                        ball.setDY(ball.getDY() * -1);
+                        ball.bounceVertical();
                     } else {
                         // Nếu không xác định được, đảo cả hai
-                        ball.setDX(ball.getDX() * -1);
-                        ball.setDY(ball.getDY() * -1);
+                        ball.bounceHorizontal();
+                        ball.bounceVertical();
                     }
 
+                    boolean wasDestroyed = b.isDestroyed(); // Kiểm tra trạng thái trước khi hit
                     b.hit(bricks); // Xử lý logic phá gạch
+
+                    // --- Bổ sung logic tính điểm ---
+                    if (!wasDestroyed && b.isDestroyed()) {
+                        score += b.getScoreValue();
+                    }
+
                     break; // Chỉ xử lý va chạm với 1 viên gạch mỗi frame
                 }
             }
@@ -157,19 +166,25 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
         g.drawString("Lives: " + lives, WIDTH - 100, 20);
         g.drawString("Level: " + level, WIDTH / 2 - 40, 20);
 
+        if (!ball.isInMotion() && !gameOver) {
+            g.setColor(Color.YELLOW);
+            g.setFont(new Font("Arial", Font.BOLD, 24));
+            g.drawString("Bấm SPACE để bắt đầu", WIDTH/2 - 130, HEIGHT/2 + 100);
+        }
+
         if (win) {
             g.setColor(Color.WHITE);
             g.setFont(new Font("Arial", Font.BOLD, 40));
-            g.drawString("Victory!", WIDTH / 2 - 180, HEIGHT / 2 - 100);
+            g.drawString("Bạn đã chiến thắng!", WIDTH/2 - 180 , HEIGHT/2 - 100 );
         }
 
         if (gameOver && !win) {
             g.setFont(new Font("Arial", Font.BOLD, 36));
-            g.drawString("Game Over! Press R to Restart", 120, HEIGHT / 2);
+            g.drawString("Game Over! Press R to Restart", 120, HEIGHT/2);
         }
         if (gameOver && win) {
             g.setFont(new Font("Arial", Font.BOLD, 36));
-            g.drawString("Press R to Restart", 235, HEIGHT / 2 + 50);
+            g.drawString("Press R to Restart", 235, HEIGHT/2 + 50);
         }
     }
 

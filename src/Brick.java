@@ -8,6 +8,12 @@ public class Brick {
     public static final int STRONG = 2;
     public static final int UNBREAKABLE = 3;
 
+    // Giá trị điểm (Thêm mới)
+    private static final int SCORE_NORMAL = 10;
+    private static final int SCORE_STRONG = 30;
+    private static final int SCORE_EXPLOSIVE = 10;
+    private static final int SCORE_UNBREAKABLE = 0;
+
     private final int x, y, width, height;
     private final int type;
     private int hitPoints;
@@ -42,6 +48,22 @@ public class Brick {
     public boolean isDestroyed() { return destroyed; }
     public int getType() { return type; }
 
+    // Trả về số điểm khi gạch bị phá hủy
+    public int getScoreValue() {
+        switch (type) {
+            case NORMAL:
+                return SCORE_NORMAL;
+            case STRONG:
+                return SCORE_STRONG;
+            case EXPLOSIVE:
+                return SCORE_EXPLOSIVE;
+            case UNBREAKABLE:
+                return SCORE_UNBREAKABLE;
+            default:
+                return 0;
+        }
+    }
+
     // Khi bóng chạm
     public void hit(ArrayList<Brick> bricks) {
         if (type == UNBREAKABLE || destroyed) return; // miễn nhiễm
@@ -56,11 +78,17 @@ public class Brick {
 
     // Gạch nổ: phá gạch xung quanh
     private void explode(ArrayList<Brick> bricks) {
-        Rectangle thisRect = getRect();
+        // Tạo Vùng Nổ (3x3 lần kích thước gạch, lùi lại 1 lần width/height để bao quanh gạch đang nổ)
+        Rectangle explosionZone = new Rectangle(
+                this.x - this.width,       // Góc X mới
+                this.y - this.height,      // Góc Y mới
+                this.width * 3,            // Chiều rộng mới (gấp 3 lần)
+                this.height * 3            // Chiều cao mới (gấp 3 lần)
+        );
         for (Brick b : bricks) {
             if (!b.destroyed && b.type != UNBREAKABLE) {
                 Rectangle bRect = b.getRect();
-                if (thisRect.intersects(bRect)) {
+                if (explosionZone.intersects(bRect)) {
                     b.destroyed = true;
                 }
             }

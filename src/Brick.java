@@ -29,26 +29,42 @@ public class Brick {
 
         switch (type) {
             case NORMAL:
-            case EXPLOSIVE: 
-                hitPoints = 1; 
+            case EXPLOSIVE:
+                hitPoints = 1;
                 break;
-            case STRONG: 
+            case STRONG:
                 hitPoints = 3; // cần 3 lần
                 break;
-            case UNBREAKABLE: 
+            case UNBREAKABLE:
                 hitPoints = Integer.MAX_VALUE; // không bao giờ vỡ
                 break;
         }
     }
 
-    public int getX() { return x; }
-    public int getY() { return y; }
-    public int getWidth() { return width; }
-    public int getHeight() { return height; }
-    public boolean isDestroyed() { return destroyed; }
-    public int getType() { return type; }
+    public int getX() {
+        return x;
+    }
 
-    // Trả về số điểm khi gạch bị phá hủy
+    public int getY() {
+        return y;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public boolean isDestroyed() {
+        return destroyed;
+    }
+
+    public int getType() {
+        return type;
+    }
+
     public int getScoreValue() {
         switch (type) {
             case NORMAL:
@@ -64,19 +80,31 @@ public class Brick {
         }
     }
 
-    // Khi bóng chạm
-    public void hit(ArrayList<Brick> bricks) {
-        if (type == UNBREAKABLE || destroyed) return; // miễn nhiễm
+    public int hit(ArrayList<Brick> bricks) {
+        if (type == UNBREAKABLE || destroyed) return 0;
+
         hitPoints--;
         if (hitPoints <= 0) {
             destroyed = true;
+            int totalScore = getScoreValue();
             if (type == EXPLOSIVE) {
+                Rectangle thisRect = getRect();
                 explode(bricks);
+                for (Brick b : bricks) {
+                    if (b != this && !b.destroyed && b.type != UNBREAKABLE) {
+                        Rectangle bRect = b.getRect();
+                        if (thisRect.intersects(bRect)) {
+                            b.destroyed = true;
+                            totalScore += b.getScoreValue(); // Just add the score value directly
+                        }
+                    }
+                }
             }
+            return totalScore;
         }
+        return 0;
     }
 
-    // Gạch nổ: phá gạch xung quanh
     private void explode(ArrayList<Brick> bricks) {
         // Tạo Vùng Nổ (3x3 lần kích thước gạch, lùi lại 1 lần width/height để bao quanh gạch đang nổ)
         Rectangle explosionZone = new Rectangle(
@@ -85,11 +113,13 @@ public class Brick {
                 this.width * 3,            // Chiều rộng mới (gấp 3 lần)
                 this.height * 3            // Chiều cao mới (gấp 3 lần)
         );
+
         for (Brick b : bricks) {
-            if (!b.destroyed && b.type != UNBREAKABLE) {
-                Rectangle bRect = b.getRect();
-                if (explosionZone.intersects(bRect)) {
+            if (b != this && !b.destroyed && b.type != UNBREAKABLE) {
+                int totalScore = getScoreValue();
+                if (explosionZone.intersects(b.getRect())) {
                     b.destroyed = true;
+                    totalScore += b.getScoreValue();
                 }
             }
         }

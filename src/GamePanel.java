@@ -11,6 +11,8 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
     private Paddle paddle;
     private Ball ball;
     private ArrayList<Brick> bricks;
+    private CollisionInfo collisionInfo;
+
     private boolean leftPressed = false, rightPressed = false;
     private int score = 0, lives = 3;
     private boolean gameOver = false;
@@ -40,6 +42,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
         ball = new Ball(WIDTH / 2, HEIGHT - 70, MenuPanel.ballSize, MenuPanel.ballSpeed);
         bricks = new ArrayList<>();
         createLevel(level);
+        collisionInfo = new CollisionInfo(ball, paddle, bricks);
     }
 
     @Override
@@ -56,64 +59,12 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
             }
 
             ball.move();
-
-            // ball vs walls
-            if (ball.getX() - ball.getRadius() <= 0 || ball.getX() + ball.getRadius() >= WIDTH) {
-                ball.bounceHorizontal();
-            }
-            if (ball.getY() - ball.getRadius() <= 0) { // Tường Trên
-                ball.bounceVertical();
-            }
-
-            // ball vs paddle
-            if (ball.getRect().intersects(paddle.getRect())) {
-                ball.bounceVertical();
-                paddle.setGlow(); // Kích hoạt hiệu ứng phát sáng
-            }
+            
+            // Collision detection & handler for ball, brick, paddle (add score based on collision)
+            score += collisionInfo.updateCollision();
 
             paddle.updateGlow(); // Cập nhật hiệu ứng mỗi frame
-
-            // ball vs bricks
-            Rectangle nextBallRect = new Rectangle(
-                    (int) Math.round(ball.getX() + ball.getDX() - ball.getRadius()),
-                    (int) Math.round(ball.getY() + ball.getDY() - ball.getRadius()),
-                    ball.getDiameter(),
-                    ball.getDiameter()
-            );
-
-            for (Brick b : bricks) {
-                if (!b.isDestroyed() && nextBallRect.intersects(b.getRect())) {
-                    Rectangle brickRect = b.getRect();
-
-                    // Xác định hướng va chạm
-                    boolean hitFromLeft = ball.getX() + ball.getDiameter() <= brickRect.x && ball.getX() + ball.getDiameter() + ball.getDX() > brickRect.x;
-                    boolean hitFromRight = ball.getX() >= brickRect.x + brickRect.width && ball.getX() + ball.getDX() < brickRect.x + brickRect.width;
-                    boolean hitFromTop = ball.getY() + ball.getDiameter() <= brickRect.y && ball.getY() + ball.getDiameter() + ball.getDY() > brickRect.y;
-                    boolean hitFromBottom = ball.getY() >= brickRect.y + brickRect.height && ball.getY() + ball.getDY() < brickRect.y + brickRect.height;
-
-                    // Đảo chiều vận tốc phù hợp
-                    if (hitFromLeft || hitFromRight) {
-                        ball.bounceHorizontal();
-                    } else if (hitFromTop || hitFromBottom) {
-                        ball.bounceVertical();
-                    } else {
-                        // Nếu không xác định được, đảo cả hai
-                        ball.bounceHorizontal();
-                        ball.bounceVertical();
-                    }
-
-                    boolean wasDestroyed = b.isDestroyed(); // Kiểm tra trạng thái trước khi hit
-                    b.hit(bricks); // Xử lý logic phá gạch
-
-                    // --- Bổ sung logic tính điểm ---
-                    if (!wasDestroyed && b.isDestroyed()) {
-                        score += b.getScoreValue();
-                    }
-
-                    break; // Chỉ xử lý va chạm với 1 viên gạch mỗi frame
-                }
-            }
-
+            
             // ball out of bounds
             if (ball.getY() > HEIGHT) {
                 lives--;
@@ -121,7 +72,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
                     gameOver = true;
                 } else {
                     // reset ball position in the paddle
-                    ball.reset(paddle.getX() + paddle.getWidth() / 2, paddle.getY() - ball.getRadius() - 2);
+                    ball.reset(paddle.getX() + paddle.getWidth() / 2, paddle.getY() - ball.getRadius() - 1);
                 }
             }
 
@@ -141,7 +92,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
                 } else {
                     createLevel(level);
                     ball.reset(paddle.getX() + paddle.getWidth() / 2,
-                            paddle.getY() - ball.getRadius() - 2);
+                            paddle.getY() - ball.getRadius() - 1);
                 }
             }
         }
@@ -182,6 +133,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
             g.setFont(new Font("Arial", Font.BOLD, 36));
             g.drawString("Game Over! Press R to Restart", 120, HEIGHT/2);
         }
+
         if (gameOver && win) {
             g.setFont(new Font("Arial", Font.BOLD, 36));
             g.drawString("Press R to Restart", 235, HEIGHT/2 + 50);
@@ -206,7 +158,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
             if (level > 5)
                 level = 1;
             createLevel(level);
-            ball.reset(paddle.getX() + paddle.getWidth() / 2, paddle.getY() - ball.getRadius() - 2);
+            ball.reset(paddle.getX() + paddle.getWidth() / 2, paddle.getY() - ball.getRadius() - 1);
         }
     }
 
@@ -220,8 +172,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
     }
 
     @Override
-    public void keyTyped(KeyEvent e) {
-    }
+    public void keyTyped(KeyEvent e) {}
 
     private void createLevel(int lvl) {
         bricks.clear();

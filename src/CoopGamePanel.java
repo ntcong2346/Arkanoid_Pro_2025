@@ -12,6 +12,7 @@ public class CoopGamePanel extends JPanel implements ActionListener, KeyListener
     private Ball ball;
     private int paddleLaunchIndex = 0; // 0: paddle1, 1: paddle2
     private ArrayList<Brick> bricks;
+    private CollisionInfo collisionInfo;
     private boolean leftPressed = false, rightPressed = false;
     private boolean aPressed = false, dPressed = false;
     private int score = 0, lives = 3;
@@ -37,8 +38,8 @@ public class CoopGamePanel extends JPanel implements ActionListener, KeyListener
         win = false;
         gameOver = false;
         level = 1;
-        paddle2 = new Paddle(WIDTH/4 - 60, HEIGHT - 50, 120, 15);
-        paddle1 = new Paddle(WIDTH*3/4 - 60, HEIGHT - 50, 120, 15);
+        paddle2 = new Paddle(WIDTH / 4 - 60, HEIGHT - 50, 120, 15);
+        paddle1 = new Paddle(WIDTH * 3 / 4 - 60, HEIGHT - 50, 120, 15);
         paddle1.setSpeed(MenuPanel.paddleSpeed);
         paddle2.setSpeed(MenuPanel.paddleSpeed);
         ball = new Ball(0, 0, MenuPanel.ballSize, MenuPanel.ballSpeed);
@@ -68,67 +69,8 @@ public class CoopGamePanel extends JPanel implements ActionListener, KeyListener
 
             ball.move();
 
-            // Ball vs walls
-            if (ball.getX() - ball.getRadius() <= 0 || ball.getX() + ball.getRadius() >= WIDTH) {
-                ball.bounceHorizontal();
-            }
-            if (ball.getY() - ball.getRadius() <= 0) { // Tường Trên
-                ball.bounceVertical();
-            }
-
-            // Ball vs paddles (chỉ xử lý va chạm với 1 paddle mỗi frame)
-            boolean collided = false;
-            if (ball.getRect().intersects(paddle1.getRect())) {
-                ball.bounceVertical();
-                paddle1.setGlow();
-                collided = true;
-            }
-            if (!collided && ball.getRect().intersects(paddle2.getRect())) {
-                ball.bounceVertical();
-                paddle2.setGlow();
-                collided = true;
-            }
-
-            // Ball vs bricks
-            Rectangle nextBallRect = new Rectangle(
-                (int) Math.round(ball.getX() + ball.getDX() - ball.getRadius()),
-                (int) Math.round(ball.getY() + ball.getDY() - ball.getRadius()),
-                ball.getDiameter(),
-                ball.getDiameter()
-            );
-
-            for (Brick b : bricks) {
-                if (!b.isDestroyed() && nextBallRect.intersects(b.getRect())) {
-                    Rectangle brickRect = b.getRect();
-
-                    // Xác định hướng va chạm
-                    boolean hitFromLeft = ball.getX() + ball.getDiameter() <= brickRect.x && ball.getX() + ball.getDiameter() + ball.getDX() > brickRect.x;
-                    boolean hitFromRight = ball.getX() >= brickRect.x + brickRect.width && ball.getX() + ball.getDX() < brickRect.x + brickRect.width;
-                    boolean hitFromTop = ball.getY() + ball.getDiameter() <= brickRect.y && ball.getY() + ball.getDiameter() + ball.getDY() > brickRect.y;
-                    boolean hitFromBottom = ball.getY() >= brickRect.y + brickRect.height && ball.getY() + ball.getDY() < brickRect.y + brickRect.height;
-
-                    // Đảo chiều vận tốc phù hợp
-                    if (hitFromLeft || hitFromRight) {
-                        ball.bounceHorizontal();
-                    } else if (hitFromTop || hitFromBottom) {
-                        ball.bounceVertical();
-                    } else {
-                        // Nếu không xác định được, đảo cả hai
-                        ball.bounceHorizontal();
-                        ball.bounceVertical();
-                    }
-
-                    boolean wasDestroyed = b.isDestroyed(); // Kiểm tra trạng thái trước khi hit
-                    b.hit(bricks); // Xử lý logic phá gạch
-
-                    // --- Bổ sung logic tính điểm ---
-                    if (!wasDestroyed && b.isDestroyed()) {
-                        score += b.getScoreValue();
-                    }
-
-                    break; // Chỉ xử lý va chạm với 1 viên gạch mỗi frame
-                }
-            }
+            // Collision detection & handler for ball, brick, paddle (coop mode)
+            score += collisionInfo.updateCollisionCoop(paddle1, paddle2);
 
             // Ball out of bounds
             if (ball.getY() > HEIGHT) {
@@ -214,7 +156,7 @@ public class CoopGamePanel extends JPanel implements ActionListener, KeyListener
         if (k == KeyEvent.VK_D) dPressed = true;
         if (k == KeyEvent.VK_SPACE) ball.launch();
         if (k == KeyEvent.VK_R && gameOver) initGame();
-         if (k == KeyEvent.VK_S) { // Cheat: chuyển vòng
+        if (k == KeyEvent.VK_S) { // Cheat: chuyển vòng
             level++;
             if (level > 5)
                 level = 1;
@@ -222,6 +164,7 @@ public class CoopGamePanel extends JPanel implements ActionListener, KeyListener
             ball.reset(paddle1.getX() + paddle1.getWidth() / 2 - ball.getDiameter() / 2, paddle1.getY() - ball.getDiameter() - 2);
         }
     }
+
     @Override
     public void keyReleased(KeyEvent e) {
         int k = e.getKeyCode();

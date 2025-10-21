@@ -1,3 +1,5 @@
+package entity;
+
 import java.awt.*;
 
 public abstract class MovableObject extends GameObject {

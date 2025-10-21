@@ -1,4 +1,7 @@
+package game;
+
 import javax.swing.*;
+
 public class GameFrame extends JFrame {
     public GameFrame() {
         this.add(new GamePanel());

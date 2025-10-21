@@ -1,3 +1,10 @@
+package collision;
+
+import entity.Ball;
+import entity.Paddle;
+import entity.Brick;
+import game.GamePanel;
+
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -54,10 +61,9 @@ public class CollisionInfo {
             paddle1.setGlow();
             collided = true;
         }
-        if (!collided && ball.getRect().intersects(paddle2.getRect())) {
+        if (ball.getRect().intersects(paddle2.getRect())) {
             ball.bounceVertical();
             paddle2.setGlow();
-            collided = true;
         }
     }
 

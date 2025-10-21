@@ -1,3 +1,11 @@
+package main;
+
+import menu.MenuPanel;
+import game.GameFrame;
+import graphics.Assets;
+import entity.Ball;
+import entity.Paddle;
+
 import javax.swing.*;
 
 public class Main {

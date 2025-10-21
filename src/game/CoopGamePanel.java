@@ -1,3 +1,12 @@
+package game;
+
+import collision.CollisionInfo;
+import menu.MenuPanel;
+import graphics.Assets;
+import entity.Ball;
+import entity.Paddle;
+import entity.Brick;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -46,6 +55,7 @@ public class CoopGamePanel extends JPanel implements ActionListener, KeyListener
         paddleLaunchIndex = 0;
         bricks = new ArrayList<>();
         createLevel(level);
+        collisionInfo = new CollisionInfo(ball, paddle1, bricks);
     }
 
     @Override

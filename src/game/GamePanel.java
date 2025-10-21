@@ -1,3 +1,12 @@
+package game;
+
+import collision.CollisionInfo;
+import menu.MenuPanel;
+import graphics.Assets;
+import entity.Ball;
+import entity.Paddle;
+import entity.Brick;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -75,7 +84,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
                     gameOver = true;
                 } else {
                     // reset ball position in the paddle
-                    ball.reset((int)paddle.getX() + paddle.getWidth() / 2, (int)paddle.getY() - ball.getRadius() - 1);
+                    ball.reset((int)(paddle.getX() + paddle.getWidth() / 2.0), (int)(paddle.getY() - ball.getRadius() - 1));
                 }
             }
 

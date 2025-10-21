@@ -1,21 +1,19 @@
+package entity;
+
+import graphics.Assets;
+
 import java.awt.*;
-import java.awt.event.KeyEvent;
 
 public class Paddle extends MovableObject {
     private int speed; //Overall speed
     private boolean glowing;
     private int glowTimer;// số frame phát sáng (~0.15s nếu 100fps)
 
-    private boolean leftPressed;
-    private boolean rightPressed;
-
     public Paddle(double x, double y, int width, int height, int speed) {
         super(x, y, width, height);
         this.speed = speed;
         this.glowing = false;
         this.glowTimer = 0;
-        this.leftPressed = false;
-        this.rightPressed = false;
     }
 
     public double getSpeed() {
@@ -49,26 +47,6 @@ public class Paddle extends MovableObject {
             glowTimer--;
             if (glowTimer <= 0) glowing = false;
         }
-    }
-
-    public void keyPressed(KeyEvent e) {
-        int key = e.getKeyCode();
-        if (key == KeyEvent.VK_LEFT) leftPressed = true;
-        if (key == KeyEvent.VK_RIGHT) rightPressed = true;
-    }
-
-    public void keyReleased(KeyEvent e) {
-        int key = e.getKeyCode();
-        if (key == KeyEvent.VK_LEFT) leftPressed = false;
-        if (key == KeyEvent.VK_RIGHT) rightPressed = false;
-    }
-
-    public boolean isLeftPressed() {
-        return leftPressed;
-    }
-
-    public boolean isRightPressed() {
-        return rightPressed;
     }
 
     @Override

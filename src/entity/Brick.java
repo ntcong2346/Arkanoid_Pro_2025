@@ -1,3 +1,7 @@
+package entity;
+
+import graphics.Assets;
+
 import java.awt.*;
 import java.util.ArrayList;
 

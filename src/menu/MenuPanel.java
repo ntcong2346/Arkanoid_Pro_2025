@@ -1,3 +1,9 @@
+package menu;
+
+import game.GameFrame;
+import game.CoopGamePanel;
+import game.GamePanel;
+
 import javax.swing.*;
 import java.awt.*;
 

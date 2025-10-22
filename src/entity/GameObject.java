@@ -19,6 +19,9 @@ public abstract class GameObject {
 
     public abstract void render(Graphics g);
 
+    /**
+     * Center (x,y) coordinates.
+     */
     public double getX() {
         return x;
     }
@@ -43,11 +46,35 @@ public abstract class GameObject {
         this.y = y;
     }
 
-    public Rectangle getBounds() {
-        return new Rectangle((int) x, (int) y, width, height);
+    public double getLeft() {
+        return x - width / 2.0;
+    }
+
+    public double getTop() {
+        return y - height / 2.0;
+    }
+
+    public double getRight() {
+        return x + width / 2.0;
+    }
+
+    public double getBottom() {
+        return y + height / 2.0;
+    }
+
+    /**
+     * Create new Rectangle with (x,y) as top left (JavaFx shape's default coordinates).
+     */
+    public Rectangle getRect() {
+        return new Rectangle(
+                (int)getLeft(),
+                (int)getTop(),
+                width,
+                height
+        );
     }
 
     public boolean intersects(GameObject other) {
-        return getBounds().intersects(other.getBounds());
+        return getRect().intersects(other.getRect());
     }
 }

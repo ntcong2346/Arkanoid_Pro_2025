@@ -47,7 +47,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
         win = false;
         gameOver = false;
 
-        paddle = new Paddle(WIDTH / 2.0 - 60, HEIGHT - 50, 120, 15, MenuPanel.paddleSpeed);
+        paddle = new Paddle(WIDTH / 2.0, HEIGHT - 50, 120, 15, MenuPanel.paddleSpeed);
         paddle.setSpeed(MenuPanel.paddleSpeed);
 
         ball = new Ball(WIDTH / 2.0, HEIGHT - 70, MenuPanel.ballSize, MenuPanel.ballSpeed);
@@ -64,10 +64,10 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
                 paddle.moveLeft();
             if (rightPressed)
                 paddle.moveRight(WIDTH);
-            // ball in the paddle
+            // Ball in the paddle before launch
             if (!ball.isInMotion()) {
-                ball.setX(paddle.getX() + paddle.getWidth() / 2.0);
-                ball.setY(paddle.getY() - ball.getRadius() - 1);
+                ball.setX((int)paddle.getX());
+                ball.setY((int)paddle.getTop() - ball.getRadius() - 1);
             }
 
             ball.move();
@@ -103,7 +103,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
                     win = true;
                 } else {
                     createLevel(level);
-                    ball.reset((int)paddle.getX() + paddle.getWidth() / 2,
+                    ball.reset((int)paddle.getX() + paddle.getWidth() / 2.0,
                             (int)paddle.getY() - ball.getRadius() - 1);
                 }
             }
@@ -162,11 +162,11 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
         if (k == KeyEvent.VK_RIGHT)
             rightPressed = true;
         if (k == KeyEvent.VK_SPACE)
-            ball.launch(); // press space to launch the ball
+            ball.launch(); // Press space to launch the ball
         if (k == KeyEvent.VK_R && gameOver) {
             initGame();
         }
-        if (k == KeyEvent.VK_S) { // Cheat: chuyển vòng
+        if (k == KeyEvent.VK_S) { // Change levels
             level++;
             if (level > 5)
                 level = 1;

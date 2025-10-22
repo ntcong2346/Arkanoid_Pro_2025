@@ -11,22 +11,6 @@ public abstract class MovableObject extends GameObject {
         this.dy = 0;
     }
 
-    public double getDx() {
-        return dx;
-    }
-
-    public double getDy() {
-        return dy;
-    }
-
-    public void setDx(double dx) {
-        this.dx = dx;
-    }
-
-    public void setDy(double dy) {
-        this.dy = dy;
-    }
-
     public void move() {
         x += dx;
         y += dy;
@@ -46,16 +30,15 @@ public abstract class MovableObject extends GameObject {
     }
 
     /**
-     * Calculate vector speed using Pythagorean theorem
-     * @return
+     * Calculate vector speed using Pythagorean theorem.
      */
     public double getSpeed() {
-        return Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+        return Math.sqrt(dx * dx + dy * dy);
     }
 
     /**
      * Normalize function to scale back moving speed to avoid sum of vertical and horizontal positions
-     * larger & faster than original speed value to maintain stable speed
+     * larger & faster than original speed value to maintain stable speed.
      */
     public void normalize(double originalSpeed) {
         double length = getSpeed();

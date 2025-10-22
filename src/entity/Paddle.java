@@ -26,15 +26,16 @@ public class Paddle extends MovableObject {
 
     public void moveLeft() {
         x -= speed;
-        if (x < 0) {
-            x = 0;
+        if (getLeft() < 0) {
+            x = width / 2.0;
         }
     }
 
     public void moveRight(int panelWidth) {
         x += speed;
-        if (x + width > panelWidth)
-            x = panelWidth - width;
+        if (getRight() > panelWidth) {
+            x = panelWidth - width / 2.0;
+        }
     }
 
     public void setGlow() {
@@ -56,19 +57,12 @@ public class Paddle extends MovableObject {
 
     @Override
     public void render(Graphics g) {
-        if (glowing) {
-            g.drawImage(Assets.paddleGlow, (int)x, (int)y, width, height, null);
-        } else {
-            g.drawImage(Assets.paddleNormal, (int)x, (int)y, width, height, null);
-        }
-    }
+        int drawX = (int)getLeft();
+        int drawY = (int)getTop();
 
-    public Rectangle getRect() {
-        return new Rectangle((int)x, (int)y, width, height);
-    }
-
-    public void reset(double nx, double ny) {
-        // Nếu cần reset vị trí paddle, thêm code ở đây
-        // Hiện tại để trống
+        if (glowing)
+            g.drawImage(Assets.paddleGlow, drawX, drawY, width, height, null);
+        else
+            g.drawImage(Assets.paddleNormal, drawX, drawY, width, height, null);
     }
 }

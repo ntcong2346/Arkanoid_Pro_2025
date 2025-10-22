@@ -47,8 +47,8 @@ public class CoopGamePanel extends JPanel implements ActionListener, KeyListener
         win = false;
         gameOver = false;
         level = 1;
-        paddle2 = new Paddle(WIDTH / 4.0 - 60.0, HEIGHT - 50, 120, 15, MenuPanel.paddleSpeed);
-        paddle1 = new Paddle(WIDTH * 3 / 4.0 - 60.0, HEIGHT - 50, 120, 15, MenuPanel.paddleSpeed);
+        paddle2 = new Paddle(WIDTH / 4.0, HEIGHT - 50, 120, 15, MenuPanel.paddleSpeed);
+        paddle1 = new Paddle(WIDTH * 3 / 4.0, HEIGHT - 50, 120, 15, MenuPanel.paddleSpeed);
         paddle1.setSpeed(MenuPanel.paddleSpeed);
         paddle2.setSpeed(MenuPanel.paddleSpeed);
         ball = new Ball(0, 0, MenuPanel.ballSize, MenuPanel.ballSpeed);
@@ -71,10 +71,10 @@ public class CoopGamePanel extends JPanel implements ActionListener, KeyListener
             paddle2.updateGlow();
 
             // Ball follows paddle before launch
-            if (!ball.isInMotion()) {
+            if (ball.isInMotion()) {
                 Paddle launchPad = (paddleLaunchIndex == 0) ? paddle1 : paddle2;
-                ball.setX(launchPad.getX() + launchPad.getWidth() / 2.0);
-                ball.setY(launchPad.getY() - ball.getRadius() - 1);
+                ball.setX((int)launchPad.getX() + launchPad.getWidth() / 2);
+                ball.setY((int)launchPad.getY() - ball.getRadius() - 1);
             }
 
             ball.move();

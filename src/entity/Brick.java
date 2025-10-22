@@ -23,7 +23,7 @@ public class Brick extends GameObject {
     private boolean destroyed;
 
     public Brick(int x, int y, int w, int h, int type) {
-        super(x, y, w, h);
+        super(x + w / 2.0, y + h / 2.0, w, h);
         this.type = type;
         this.destroyed = false;
 
@@ -80,8 +80,8 @@ public class Brick extends GameObject {
         int explosionScore = 0;
         // Tạo Vùng Nổ (3x3 lần kích thước gạch, lùi lại 1 lần width/height để bao quanh gạch đang nổ)
         Rectangle explosionZone = new Rectangle(
-                (int)this.x - this.width,       // Góc X mới
-                (int)this.y - this.height,      // Góc Y mới
+                (int)(this.x - this.width * 1.5),       // Góc X mới
+                (int)(this.y - this.height * 1.5),      // Góc Y mới
                 this.width * 3,            // Chiều rộng mới (gấp 3 lần)
                 this.height * 3            // Chiều cao mới (gấp 3 lần)
         );
@@ -102,29 +102,28 @@ public class Brick extends GameObject {
     @Override
     public void render(Graphics g) {
         if (destroyed) return;
+        // Convert center-based back to top left for collision.
+        int drawX = (int)getLeft();
+        int drawY = (int)getTop();
         switch (type) {
             case NORMAL:
-                g.drawImage(Assets.brickNormal, (int)x, (int)y, width, height, null);
+                g.drawImage(Assets.brickNormal, drawX, drawY, width, height, null);
                 break;
             case EXPLOSIVE:
-                g.drawImage(Assets.brickExplosive, (int)x, (int)y, width, height, null);
+                g.drawImage(Assets.brickExplosive, drawX, drawY, width, height, null);
                 break;
             case STRONG:
                 if (hitPoints == 3) {
-                    g.drawImage(Assets.brickStrong3, (int)x, (int)y, width, height, null);
+                    g.drawImage(Assets.brickStrong3, drawX, drawY, width, height, null);
                 } else if (hitPoints == 2) {
-                    g.drawImage(Assets.brickStrong2, (int)x, (int)y, width, height, null);
+                    g.drawImage(Assets.brickStrong2, drawX, drawY, width, height, null);
                 } else if (hitPoints == 1) {
-                    g.drawImage(Assets.brickStrong1, (int)x, (int)y, width, height, null);
+                    g.drawImage(Assets.brickStrong1, drawX, drawY, width, height, null);
                 }
                 break;
             case UNBREAKABLE:
-                g.drawImage(Assets.brickUnbreakable, (int)x, (int)y, width, height, null);
+                g.drawImage(Assets.brickUnbreakable, drawX, drawY, width, height, null);
                 break;
         }
-    }
-
-    public Rectangle getRect() {
-        return getBounds();
     }
 }

@@ -32,43 +32,44 @@ public class CollisionInfo {
     }
 
     /**
-     * Ball & wall collision
+     * Ball & wall collision.
      */
     private void handleWallCollision() {
-        if (ball.getX() <= 0 || ball.getX() + ball.getRadius() >= GamePanel.WIDTH)
+        if (ball.getX() - ball.getRadius() <= 0 || ball.getX() + ball.getRadius() >= GamePanel.WIDTH)
             ball.bounceHorizontal();
         if (ball.getY() - ball.getRadius() <= 0)
             ball.bounceVertical();
     }
 
     /**
-     * Ball & paddle collision
+     * Ball & paddle collision + set paddle glow when collide.
      */
     private void handlePaddleCollision() {
-        if (ball.getRect().intersects(paddle.getRect())) {
+        if (ball.intersects(paddle)) {
             ball.bounceVertical();
-            paddle.setGlow(); // Kích hoạt hiệu ứng phát sáng
+            paddle.setGlow();
         }
     }
 
     /**
-     * Ball & paddle collision for coop mode w/ 2 paddles
+     * Ball & paddle collision for coop mode w/ 2 paddles.
      */
     private void handlePaddleCollisionCoop(Paddle paddle1, Paddle paddle2) {
         boolean collided = false;
-        if (ball.getRect().intersects(paddle1.getRect())) {
+        if (ball.intersects(paddle1)) {
             ball.bounceVertical();
             paddle1.setGlow();
             collided = true;
         }
-        if (ball.getRect().intersects(paddle2.getRect())) {
+
+        if (ball.intersects(paddle2)) {
             ball.bounceVertical();
             paddle2.setGlow();
         }
     }
 
     /**
-     * Ball & brick collision
+     * Ball & brick collision.
      */
     private int handleBrickCollision() {
         for (Brick brick : bricks) {

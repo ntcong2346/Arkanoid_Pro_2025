@@ -80,10 +80,10 @@ public class CoopGamePanel extends JPanel implements ActionListener, KeyListener
             updatePowerUps();
 
             // Ball follows paddle before launch
-            if (ball.isInMotion()) {
+            if (!ball.isInMotion()) {
                 Paddle launchPad = (paddleLaunchIndex == 0) ? paddle1 : paddle2;
-                ball.setX((int)launchPad.getX() + launchPad.getWidth() / 2);
-                ball.setY((int)launchPad.getY() - ball.getRadius() - 1);
+                ball.setX((int)launchPad.getX());
+                ball.setY((int)launchPad.getTop() - ball.getRadius() - 1);
             }
 
             ball.move();

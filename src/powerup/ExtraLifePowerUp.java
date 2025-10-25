@@ -31,7 +31,7 @@ public class ExtraLifePowerUp extends PowerUp {
      */
     @Override
     public void applyEffect(Paddle paddle) {
-        PowerUpManager.addLife();
+        PowerUpManager.addLife(1);
     }
 
     @Override

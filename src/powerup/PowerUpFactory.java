@@ -9,6 +9,8 @@ public final class PowerUpFactory {
     private static final Random RANDOM = new Random();
     private static final int WIDE_PADDLE_CHANCE = 60;
     private static final int EXTRA_LIFE_CHANCE = 80;
+    private static final int LIFE_DOWN_CHANCE = 90;
+    private static final int LASER_CHANCE = 85;  // 5% chance
 
     private PowerUpFactory() {}
 
@@ -25,6 +27,12 @@ public final class PowerUpFactory {
         }
         if (roll < EXTRA_LIFE_CHANCE) {
             return new ExtraLifePowerUp(x, y);
+        }
+        if (roll < LIFE_DOWN_CHANCE) {
+            return new LifeDownPowerUp(x, y);
+        }
+        if (roll < LASER_CHANCE) {
+            return new LaserPaddlePowerUp(x, y);
         }
         return null;
     }

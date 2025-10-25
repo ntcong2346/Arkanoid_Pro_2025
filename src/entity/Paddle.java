@@ -1,5 +1,6 @@
 package entity;
 
+import game.GamePanel;
 import graphics.Assets;
 
 import java.awt.*;
@@ -9,6 +10,8 @@ public class Paddle extends MovableObject {
     private boolean glowing;
     private int glowTimer;// số frame phát sáng (~0.15s nếu 100fps)
     private boolean isWideActive = false;
+    private boolean isLaserActive = false;
+    private GamePanel gamePanel;  // Thêm reference để gọi shootLaser
     private int originalWidth;
 
     public Paddle(double x, double y, int width, int height, int speed) {
@@ -69,7 +72,7 @@ public class Paddle extends MovableObject {
     }
 
     public Rectangle getBounds(){
-        return new Rectangle((int)x, (int)y, width, height);
+        return new Rectangle((int)getLeft(), (int)getTop(), width, height);
     }
 
     public boolean isWideActive() {
@@ -97,5 +100,26 @@ public class Paddle extends MovableObject {
 
     public int getOriginalWidth() {  // ← THÊM ĐỂ FIX LỖI
         return originalWidth;
+    }
+
+    /**
+     * Returns whether laser is active.
+     */
+    public boolean isLaserActive() {
+        return isLaserActive;
+    }
+
+    /**
+     * Sets laser active state.
+     */
+    public void setLaserActive(boolean active) {
+        this.isLaserActive = active;
+    }
+
+    /**
+     * Returns the associated GamePanel.
+     */
+    public GamePanel getGamePanel() {
+        return gamePanel;
     }
 }

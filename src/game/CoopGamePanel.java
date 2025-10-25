@@ -1,6 +1,7 @@
 package game;
 
 import collision.CollisionInfo;
+import entity.Laser;
 import menu.MenuPanel;
 import graphics.Assets;
 import entity.Ball;
@@ -28,6 +29,8 @@ public class CoopGamePanel extends JPanel implements ActionListener, KeyListener
 
     /** List of active power-ups falling from destroyed bricks. */
     private final List<PowerUp> powerUps = new ArrayList<>();
+
+    private List<Laser> lasers = new ArrayList<>();  // Thêm
 
     private boolean leftPressed = false, rightPressed = false;
     private boolean aPressed = false, dPressed = false;
@@ -94,9 +97,8 @@ public class CoopGamePanel extends JPanel implements ActionListener, KeyListener
             // Ball out of bounds
             if (ball.getY() > HEIGHT) {
                 lives--;
-                if (lives <= 0) {
-                    gameOver = true;
-                } else {
+                checkGameOver();
+                if (lives > 0){
                     paddleLaunchIndex = 1 - paddleLaunchIndex; // Đổi paddle launch
                     ball.reset(0, 0); // Vị trí sẽ được cập nhật ở trên
                 }
@@ -122,6 +124,7 @@ public class CoopGamePanel extends JPanel implements ActionListener, KeyListener
                 }
             }
         }
+        updateLasers();
         repaint();
     }
 
@@ -138,6 +141,7 @@ public class CoopGamePanel extends JPanel implements ActionListener, KeyListener
         }
 
         renderPowerUps(g);
+        renderLasers(g);
 
         g.setColor(Color.WHITE);
         g.setFont(new Font("Arial", Font.PLAIN, 18));
@@ -223,7 +227,8 @@ public class CoopGamePanel extends JPanel implements ActionListener, KeyListener
 
             Paddle hitPaddle = getHitPaddle(powerUp);
             if (hitPaddle != null) {
-                powerUp.applyEffect(hitPaddle);
+                powerUp.applyEffect(hitPaddle);  // Áp dụng cho paddle bị va chạm
+                checkGameOver();
                 powerUps.remove(i);
                 continue;
             }
@@ -254,6 +259,45 @@ public class CoopGamePanel extends JPanel implements ActionListener, KeyListener
             return paddle2;
         }
         return null;
+    }
+
+    public Paddle getPaddle1() {
+        return paddle1;
+    }
+
+    public Paddle getPaddle2() {
+        return paddle2;
+    }
+
+    public void shootLaserFromPaddle(int x, int y) {
+        if (paddle1.isLaserActive() || paddle2.isLaserActive()) {
+            lasers.add(new Laser(x, y));
+        }
+    }
+
+    private void updateLasers() {
+        for (int i = lasers.size() - 1; i >= 0; i--) {
+            Laser laser = lasers.get(i);
+            laser.update();
+            if (!laser.isActive()) {
+                lasers.remove(i);
+                continue;
+            }
+            for (int j = bricks.size() - 1; j >= 0; j--) {
+                Brick brick = bricks.get(j);
+                if (!brick.isDestroyed() && laser.getBounds().intersects(brick.getRect())) {
+                    score += brick.takeHit(bricks);
+                    lasers.remove(i);
+                    break;
+                }
+            }
+        }
+    }
+
+    private void renderLasers(Graphics g) {
+        for (Laser laser : lasers) {
+            laser.render(g);
+        }
     }
 
     private void createLevel(int lvl) {
@@ -305,6 +349,11 @@ public class CoopGamePanel extends JPanel implements ActionListener, KeyListener
             default:
                 createLevel(1);
                 break;
+        }
+    }
+    private void checkGameOver() {
+        if (lives <= 0) {
+            gameOver = true;
         }
     }
 }

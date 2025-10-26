@@ -47,7 +47,7 @@ public class LaserPaddlePowerUp extends PowerUp {
         g.setColor(Color.RED);
         g.fillRect((int) x, (int) y, width, height);
         g.setColor(Color.YELLOW);
-        int symbolWidth = 6;  // Ước lượng chiều rộng "⚡"
+        int symbolWidth = 5;  // Ước lượng chiều rộng "⚡"
         int centerX = (int) x + (width - symbolWidth) / 2;  // Căn giữa
         g.drawString("⚡", centerX, (int) y + 16);
     }

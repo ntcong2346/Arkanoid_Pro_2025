@@ -20,7 +20,6 @@ public class CoopGamePanel extends JPanel implements ActionListener, KeyListener
     public static final int WIDTH = 800;
     public static final int HEIGHT = 600;
 
-    private Timer timer;
     private Paddle paddle1, paddle2;
     private Ball ball;
     private int paddleLaunchIndex = 0; // 0: paddle1, 1: paddle2
@@ -30,7 +29,7 @@ public class CoopGamePanel extends JPanel implements ActionListener, KeyListener
     /** List of active power-ups falling from destroyed bricks. */
     private final List<PowerUp> powerUps = new ArrayList<>();
 
-    private List<Laser> lasers = new ArrayList<>();  // Thêm
+    private final List<Laser> lasers = new ArrayList<>();  // Thêm
 
     private boolean leftPressed = false, rightPressed = false;
     private boolean aPressed = false, dPressed = false;
@@ -47,7 +46,7 @@ public class CoopGamePanel extends JPanel implements ActionListener, KeyListener
 
         initGame();
 
-        timer = new Timer(10, this);
+        Timer timer = new Timer(10, this);
         timer.start();
         PowerUpManager.setCoopPanel(this);
     }

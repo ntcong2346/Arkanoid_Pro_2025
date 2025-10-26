@@ -1,6 +1,5 @@
 package entity;
 
-import game.GamePanel;
 import graphics.Assets;
 
 import java.awt.*;
@@ -11,7 +10,6 @@ public class Paddle extends MovableObject {
     private int glowTimer;// số frame phát sáng (~0.15s nếu 100fps)
     private boolean isWideActive = false;
     private boolean isLaserActive = false;
-    private GamePanel gamePanel;  // Thêm reference để gọi shootLaser
     private int originalWidth;
 
     public Paddle(double x, double y, int width, int height, int speed) {
@@ -114,12 +112,5 @@ public class Paddle extends MovableObject {
      */
     public void setLaserActive(boolean active) {
         this.isLaserActive = active;
-    }
-
-    /**
-     * Returns the associated GamePanel.
-     */
-    public GamePanel getGamePanel() {
-        return gamePanel;
     }
 }

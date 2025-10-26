@@ -61,18 +61,6 @@ public class Ball extends MovableObject {
         g.drawImage(Assets.ball, (int)(x - radius), (int)(y - radius), 2 * radius, 2 * radius, null);
     }
 
-    public boolean hitsPaddle(Paddle paddle) {
-        Rectangle ballRect = getRect();
-        Rectangle paddleRect = paddle.getRect();
-        return ballRect.intersects(paddleRect);
-    }
-
-    public boolean hitsBrick(Brick brick) {
-        Rectangle ballRect = getRect();
-        Rectangle brickRect = brick.getRect();
-        return ballRect.intersects(brickRect);
-    }
-
     public void reset(double nx, double ny) {
         x = nx;
         y = ny;

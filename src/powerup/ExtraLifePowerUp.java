@@ -44,6 +44,8 @@ public class ExtraLifePowerUp extends PowerUp {
         g.setColor(Color.RED);
         g.fillOval((int) x, (int) y, width, height);
         g.setColor(Color.WHITE);
-        g.drawString("♥", (int) x + 8, (int) y + 16);
+        int symbolWidth = 7;  // Ước lượng chiều rộng "♥"
+        int centerX = (int) x + (width - symbolWidth) / 2;  // Căn giữa
+        g.drawString("♥", centerX, (int) y + 16);
     }
 }

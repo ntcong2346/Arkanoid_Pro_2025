@@ -16,12 +16,6 @@ public class CollisionInfo {
     private Paddle paddle;
     private ArrayList<Brick> bricks;
 
-    /** Probability of power-up drop (70%). */
-    private static final double DROP_PROBABILITY = 0.7;
-
-    /** Offset from brick center for power-up spawn. */
-    private static final int POWER_UP_OFFSET = 12;
-
     public CollisionInfo(Ball ball, Paddle paddle, ArrayList<Brick> bricks) {
         this.ball = ball;
         this.paddle = paddle;
@@ -106,7 +100,7 @@ public class CollisionInfo {
     }
 
     /**
-     * Drops a power-up from a destroyed brick with 70% probability.
+     * Drops a power-up from a destroyed brick.
      *
      * @param brick the destroyed brick
      */
@@ -116,32 +110,30 @@ public class CollisionInfo {
                     calculatePowerUpX(brick),
                     calculatePowerUpY(brick)
             );
-            if (powerUp != null) {
-                PowerUpManager.addPowerUp(powerUp);
-            }
+            PowerUpManager.addPowerUp(powerUp);
         }
     }
 
     /**
-     * Determines if a power-up should drop (70% chance).
+     * Determines if a power-up should drop.
      *
      * @return true if power-up should drop
      */
-    private static final boolean shouldDropPowerUp() {
-        return Math.random() < DROP_PROBABILITY;
+    private static boolean shouldDropPowerUp() {
+        return Math.random() < 0.5;
     }
 
     /**
      * Calculates X position for power-up (brick center - 12px).
      */
     private static int calculatePowerUpX(Brick brick) {
-        return (int) brick.getX() + brick.getWidth() / 2 - POWER_UP_OFFSET;
+        return (int) brick.getX() + brick.getWidth() / 2 - 12;
     }
 
     /**
      * Calculates Y position for power-up (brick center - 12px).
      */
     private static int calculatePowerUpY(Brick brick) {
-        return (int) brick.getY() + brick.getHeight() / 2 - POWER_UP_OFFSET;
+        return (int) brick.getY() + brick.getHeight() / 2 - 12;
     }
 }

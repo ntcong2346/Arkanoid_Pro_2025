@@ -3,7 +3,6 @@ package powerup;
 import entity.GameObject;
 import entity.Paddle;
 
-import java.awt.Graphics;
 import java.awt.Rectangle;
 
 /**
@@ -45,6 +44,6 @@ public abstract class PowerUp extends GameObject {
     }
 
     public Rectangle getBounds() {
-        return new Rectangle((int) x, (int) y, (int) width, (int) height);
+        return new Rectangle((int) x, (int) y, width, height);
     }
 }

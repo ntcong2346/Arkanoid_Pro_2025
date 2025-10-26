@@ -20,7 +20,6 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
     public static final int WIDTH = 800;
     public static final int HEIGHT = 600;
 
-    private Timer timer;
     private Paddle paddle;
     private Ball ball;
     private ArrayList<Brick> bricks;
@@ -29,7 +28,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
     /** List of active power-ups falling from destroyed bricks. */
     private final List<PowerUp> powerUps = new ArrayList<>();
 
-    private List<Laser> lasers = new ArrayList<>();  // Thêm
+    private final List<Laser> lasers = new ArrayList<>();  // Thêm
 
     private boolean leftPressed = false, rightPressed = false;
     private int score = 0, lives = 3;
@@ -45,7 +44,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 
         initGame();
 
-        timer = new Timer(10, this); // 100 fps
+        Timer timer = new Timer(10, this); // 100 fps
         timer.start();
         PowerUpManager.setSinglePanel(this);
     }

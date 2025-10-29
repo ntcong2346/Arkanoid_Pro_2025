@@ -3,6 +3,7 @@ package menu;
 import game.GameFrame;
 import game.CoopGamePanel;
 import game.GamePanel;
+import graphics.Assets;
 
 import javax.swing.*;
 import java.awt.*;

@@ -1,5 +1,7 @@
 package graphics;
 
+import menu.MenuPanel;
+
 import javax.imageio.ImageIO;
 import javax.sound.sampled.*;
 import java.awt.*;

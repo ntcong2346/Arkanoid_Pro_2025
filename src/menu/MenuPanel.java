@@ -19,7 +19,7 @@ public class MenuPanel extends JPanel {
     public static int ballSpeed = 3;
     public static int ballSize = 12;
     public static int paddleSpeed = 6;
-    public static int gameMode = 0; // 0: Single, 1: Coop, 2: Versus
+    public static int gameMode = 0; // 0: Single, 1: Coop
 
     public MenuPanel(JFrame menuFrame) {
         setLayout(new GridBagLayout());
@@ -72,9 +72,9 @@ public class MenuPanel extends JPanel {
                 case 2: ballSpeed = 7; break;
             }
             switch (ballSizeBox.getSelectedIndex()) {
-                case 0: ballSize = 6; break;
-                case 1: ballSize = 12; break;
-                case 2: ballSize = 22; break;
+                case 0: ballSize = 4; break;
+                case 1: ballSize = 6; break;
+                case 2: ballSize = 14; break;
             }
             switch (paddleSpeedBox.getSelectedIndex()) {
                 case 0: paddleSpeed = 4; break;
@@ -90,6 +90,12 @@ public class MenuPanel extends JPanel {
                 gameFrame.setContentPane(new GamePanel());
             }
             gameFrame.setVisible(true);
+        });
+
+        soundCheck.addActionListener(e -> {
+            boolean isSelected = soundCheck.isSelected();
+            System.out.println("Sound toggled: " + isSelected);
+            Assets.toggleSound(isSelected);
         });
     }
 }

@@ -18,13 +18,13 @@ public final class PowerUpFactory {
      */
     public static PowerUp createRandom(int x, int y) {
         int roll = RANDOM.nextInt(100);
-        if (roll < 30) {
+        if (roll < 24) {
             return new WidePaddlePowerUp(x, y);
         }
-        if (roll < 60) {
+        if (roll < 49) {
             return new ExtraLifePowerUp(x, y);
         }
-        if (roll < 80) {
+        if (roll < 74) {
             return new LifeDownPowerUp(x, y);
         }
         return new LaserPaddlePowerUp(x, y);

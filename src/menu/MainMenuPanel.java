@@ -95,10 +95,8 @@ public class MainMenuPanel extends JPanel {
 
     private void showInfoDialog() {
         String info = "<html><p style='width: 300px; text-align: center;'>" +
-                "<b>How to Play:</b> Use the left/right arrow keys or A/D to move the paddle.<br>" +
-                "Break all the bricks to win the level.<br><br>" +
-                "<b>Developer:</b> Gemini AI based on previous code structure.<br>" +
-                "<b>Version:</b> Pro 2025" +
+                "<b>How to Play:</b> Use left/right arrow keys or A/D to move the paddle.<br>" +
+                "Objective: Destroy all bricks to win levels.<br><br>" +
                 "</p></html>";
         JOptionPane.showMessageDialog(
                 menuFrame,

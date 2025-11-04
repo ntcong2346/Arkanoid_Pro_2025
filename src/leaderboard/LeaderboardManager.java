@@ -22,7 +22,7 @@ public class LeaderboardManager {
         return instance;
     }
 
-    // === CẬP NHẬT LIÊN TỤC TRONG GAME ===
+    // CẬP NHẬT LIÊN TỤC TRONG GAME
     public void tryUpdateSinglePlayer(String playerName, int score) {
         if (score <= 0) return;
         ArrayList<LeaderboardEntry> top = getTopSinglePlayerEntries();
@@ -39,7 +39,7 @@ public class LeaderboardManager {
         }
     }
 
-    // === THÊM HOẶC CẬP NHẬT ENTRY ===
+    // THÊM HOẶC CẬP NHẬT ENTRY
     private void addOrUpdateEntry(String name, int single, int coop) {
         // Xóa entry cũ của cùng tên (nếu có)
         entries.removeIf(e -> e.getPlayerName().equals(name));
@@ -48,7 +48,7 @@ public class LeaderboardManager {
         saveToFile();
     }
 
-    // === TOP 5 MỖI CHẾ ĐỘ ===
+    // TOP 5 MỖI CHẾ ĐỘ
     public ArrayList<LeaderboardEntry> getTopSinglePlayerEntries() {
         ArrayList<LeaderboardEntry> list = new ArrayList<>();
         for (LeaderboardEntry e : entries) if (e.getSinglePlayerScore() > 0) list.add(e);
@@ -63,7 +63,7 @@ public class LeaderboardManager {
         return new ArrayList<>(list.subList(0, Math.min(list.size(), MAX_COOP)));
     }
 
-    // === HIGH SCORE ===
+    // HIGH SCORE
     public int getSinglePlayerHighScore() {
         return getTopSinglePlayerEntries().stream()
                 .mapToInt(LeaderboardEntry::getSinglePlayerScore)
@@ -76,7 +76,7 @@ public class LeaderboardManager {
                 .max().orElse(0);
     }
 
-    // === SCORE TO BEAT (RẤT QUAN TRỌNG) ===
+    // SCORE TO BEAT
     public int getScoreToBeat(int currentScore, boolean isCoop) {
         ArrayList<LeaderboardEntry> top = isCoop ? getTopCoopEntries() : getTopSinglePlayerEntries();
         if (top.isEmpty()) return 0;
@@ -94,7 +94,7 @@ public class LeaderboardManager {
         return last;
     }
 
-    // === GIỮ TỐI ĐA 5 MỖI LOẠI ===
+    // GIỮ TỐI ĐA 5 MỖI LOẠI
     private void trimToLimits() {
         ArrayList<LeaderboardEntry> single = new ArrayList<>();
         ArrayList<LeaderboardEntry> coop = new ArrayList<>();
@@ -112,7 +112,7 @@ public class LeaderboardManager {
         entries.addAll(coop.subList(0, Math.min(coop.size(), MAX_COOP)));
     }
 
-    // === LƯU & LOAD ===
+    // LƯU & LOAD
     private void loadFromFile() {
         try (BufferedReader br = new BufferedReader(new FileReader(FILE_NAME))) {
             String line;
@@ -145,17 +145,17 @@ public class LeaderboardManager {
         try { return Integer.parseInt(s); } catch (Exception e) { return 0; }
     }
 
-    // === DỮ LIỆU MẪU ===
+    // DỮ LIỆU MẪU
     private void initializeSampleData() {
         if (entries.isEmpty()) {
-            // === SINGLE PLAYER: 5 NGƯỜI ===
+            // SINGLE PLAYER
             tryUpdateSinglePlayer("Ace", 850);
             tryUpdateSinglePlayer("Nova", 720);
             tryUpdateSinglePlayer("Blaze", 610);
             tryUpdateSinglePlayer("Storm", 480);
             tryUpdateSinglePlayer("Rogue", 320);
 
-            // === CO-OP: 5 ĐỘI ===
+            // CO-OP
             tryUpdateCoop("Thunder Duo", 2950);
             tryUpdateCoop("Fire & Ice", 2680);
             tryUpdateCoop("Twin Strike", 2410);

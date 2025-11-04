@@ -64,7 +64,7 @@ public class GameSaveData implements Serializable {
         this.ballSize = ballSize;
     }
 
-    // --- Các phương thức Getter (Tất cả phải là public và final theo OOP và Google Style) ---
+    // Các phương thức Getter
 
     public final String getPlayerName() {
         return playerName;

@@ -11,7 +11,7 @@ import java.awt.Graphics;
  */
 public class LaserPaddlePowerUp extends PowerUp {
     /** Duration of laser power-up in milliseconds. */
-    private static final int DURATION_MS = 3000;
+    private static final int DURATION_MS = 5000;
 
     /** Type identifier for this power-up. */
     private static final String TYPE = "laser";

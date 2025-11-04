@@ -338,7 +338,7 @@ public class MenuPanel extends JPanel {
         final int result = JOptionPane.showConfirmDialog(
                 menuFrame,
                 message,
-                "Xác nhận chơi lại?",
+                "Saved game:",
                 JOptionPane.OK_CANCEL_OPTION,
                 JOptionPane.INFORMATION_MESSAGE
         );

@@ -1,4 +1,3 @@
-// LeaderboardManager.java (HOÀN CHỈNH – KHÔI PHỤC TẤT CẢ)
 package leaderboard;
 
 import java.io.*;
